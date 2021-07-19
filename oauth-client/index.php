@@ -94,6 +94,24 @@ function getUser($params) {
     echo file_get_contents($apiUrl, false, $context);
 }
 
+function accueil() {
+    echo "<h1>OAuth ESGI - Intégration SDK</h1>";
+    if (!isset($_SESSION["id"])) { // Non connecté
+?>
+<p>Vous n'êtes pas encore connecté ! Cliquez <a href="/login">ici</a> pour vous connecter</p>
+<?php
+    } else { // Connecté
+        echo $_SESSION["image"] !== "" ? "<img src='" . $_SESSION["image"] . "' alt='user-img'/>" : "";
+    ?>
+<h2>Bonjour <?= $_SESSION["name"] ?> - <?= $_SESSION["id"] ?></h2>
+<p>Vous êtes connecté via <?= $_SESSION["service"] ?> ! Cliquez <a
+    href="/disconnect?service=<?= $_SESSION["service"] ?>">ici</a> pour vous déconnecter</p>
+<p><i>Votre adresse email : <?= $_SESSION["email"] ?></i></p>
+<?php
+    }
+    //var_dump($_SESSION);
+}
+
 /**
  * AUTH CODE WORKFLOW
  * => Generate link (/login)
@@ -103,6 +121,9 @@ function getUser($params) {
  */
 $route = strtok($_SERVER["REQUEST_URI"], "?");
 switch ($route) {
+    case '/':
+        accueil();
+        break;
     case '/login':
         handleLogin();
         break;
