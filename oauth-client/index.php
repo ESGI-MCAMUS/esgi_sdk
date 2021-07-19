@@ -18,6 +18,15 @@ function handleLogin() {
         . "&scope=email"
         . "&state=" . STATE
         . "&redirect_uri=https://localhost/fbauth-success'>Se connecter avec Facebook</a>";
+    // Google OAuth
+    echo '<script src="https://apis.google.com/js/platform.js" async defer></script>'
+        . '<meta name="google-signin-client_id" content="580135369036-ch72bhlqrv90v8jcnt4h6rdehblii0i3.apps.googleusercontent.com">'
+        . '<div class="g-signin2" data-onsuccess="onSignIn"></div>'
+        . '<script>function onSignIn(googleUser) {
+            var profile = googleUser.getBasicProfile();
+            window.location.href = `https://localhost/google-auth-success?id=${profile.getId()}&email=${profile.getEmail()}&name=${profile.getName()}&image=${profile.getImageUrl()}`;
+            }
+        </script>';
 }
 
 function handleError() {
@@ -56,6 +65,20 @@ function handleFbSuccess() {
     echo file_get_contents($userUrl, false, $context);
 }
 
+function handleGoogleSuccess() {
+    if (!isset($_GET["id"]) && !isset($_GET["email"]) && !isset($_GET["name"]) && !isset($_GET["image"])) {
+        header('Location: /login');
+    } else {
+        $_SESSION["id"] = htmlspecialchars($_GET["id"]);
+        $_SESSION["email"] = htmlspecialchars($_GET["email"]);
+        $_SESSION["name"] = htmlspecialchars($_GET["name"]);
+        $_SESSION["image"] = htmlspecialchars($_GET["image"]);
+        $_SESSION["service"] = "google";
+        var_dump($_SESSION);
+        header('Location: /');
+    }
+}
+
 function getUser($params) {
     $url = "http://oauth-server:8081/token?client_id=" . CLIENT_ID . "&client_secret=" . CLIENT_SECRET . "&" . http_build_query($params);
     $result = file_get_contents($url);
@@ -83,13 +106,14 @@ switch ($route) {
     case '/login':
         handleLogin();
         break;
-        break;
     case '/auth-success':
         handleSuccess();
         break;
     case '/fbauth-success':
         handleFbSuccess();
         break;
+    case '/google-auth-success':
+        handleGoogleSuccess();
         break;
     case '/auth-cancel':
         handleError();
