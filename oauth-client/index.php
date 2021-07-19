@@ -4,6 +4,10 @@ const CLIENT_ID = "client_60ef10742d903.05413444";
 const CLIENT_FBID = "511719920161154";
 const CLIENT_SECRET = "cd989e9a4b572963e23fe39dc14c22bbceda0e60";
 const CLIENT_FBSECRET = "8d05e97f5befa64142446c05315fe663";
+
+const CLIENT_TWITCHID = "jpcyy5xfenwlhi74bqww8c3bdcpell";
+const CLIENT_TWITCHSECRET = "sqaoey36f56pd13bh1sdzeis37m4nc";
+
 const STATE = "fdzefzefze";
 function handleLogin() {
     echo "<h1>Login with OAUTH</h1>";
@@ -17,7 +21,9 @@ function handleLogin() {
         . "&client_id=" . CLIENT_FBID
         . "&scope=email"
         . "&state=" . STATE
-        . "&redirect_uri=https://localhost/fbauth-success'>Se connecter avec Facebook</a>";
+        . "&redirect_uri=https://localhost/fbauth-success'>Se connecter avec Facebook</a><br>";
+    //TWITCH OAuth
+    echo "<a href='https://id.twitch.tv/oauth2/authorize?client_id=" . CLIENT_TWITCHID . "&redirect_uri=https://localhost/twitch-auth-success&response_type=token'>Se connecter via Twitch</a><br>";
     // Google OAuth
     echo '<script src="https://apis.google.com/js/platform.js" async defer></script>'
         . '<meta name="google-signin-client_id" content="580135369036-ch72bhlqrv90v8jcnt4h6rdehblii0i3.apps.googleusercontent.com">'
@@ -63,6 +69,10 @@ function handleFbSuccess() {
         ]
     ]);
     echo file_get_contents($userUrl, false, $context);
+}
+
+function handleTwitchSuccess() {
+    var_dump($_SERVER["REQUEST_URI"]);
 }
 
 function handleGoogleSuccess() {
@@ -160,6 +170,9 @@ switch ($route) {
         break;
     case '/google-auth-success':
         handleGoogleSuccess();
+        break;
+    case '/twitch-auth-success':
+        handleTwitchSuccess();
         break;
     case '/auth-cancel':
         handleError();

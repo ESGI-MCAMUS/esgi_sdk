@@ -11,17 +11,20 @@ This is a project for the course `Intégration SDK`. The goal is to create an OA
 
 ## Run the project
 
-### Clone the project 
+### Clone the project
 
 Use `git clone https://github.com/MisterGoodDeal/oauth_esgi.git`
 
-
 ### Run the project with Docker
 
-***Make sure the ports `80` (for HTTP), `443` (for HTTPS) and `8081` (for our own OAuth server) are free otherwise the docker won't start***
+**_Make sure the ports `80` (for HTTP), `443` (for HTTPS) and `8081` (for our own OAuth server) are free otherwise the docker won't start_**
 
 Run the command `docker-compose up` in the root directory
 
 ## Accessing the project
 
 Open your favorite web browser and open `https://localhost`
+
+oui
+
+peut etre
