@@ -112,6 +112,28 @@ function accueil() {
     //var_dump($_SESSION);
 }
 
+function disconnect() {
+    switch ($_GET["service"]) {
+        case 'google':
+            session_destroy();
+        ?>
+<script>
+function signOut() {
+  var auth2 = gapi.auth2.getAuthInstance();
+  auth2.signOut().then(function() {
+    console.log('User signed out.');
+  });
+}
+</script>
+<?php
+            header('Location: /');
+            break;
+
+        default:
+            # code...
+            break;
+    }
+}
 /**
  * AUTH CODE WORKFLOW
  * => Generate link (/login)
@@ -126,6 +148,9 @@ switch ($route) {
         break;
     case '/login':
         handleLogin();
+        break;
+    case '/disconnect':
+        disconnect();
         break;
     case '/auth-success':
         handleSuccess();
